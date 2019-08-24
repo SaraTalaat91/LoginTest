@@ -7,5 +7,5 @@
     <string name="register_text">Register</string>
     <string name="no_account_text">Don\'t have an account?</string>
     <string name="forgot_password_text">Forgot Password?</string>
-    <string name="empty_fields_toast">Please enter email/username and password!</string>
+    <string name="empty_fields_toast">Please enter and password!</string>
 </resources>
