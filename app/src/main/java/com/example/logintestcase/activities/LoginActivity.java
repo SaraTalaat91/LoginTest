@@ -1,12 +1,17 @@
 package com.example.logintestcase.activities;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
 import com.example.logintestcase.R;
+import com.example.logintestcase.models.LoginModel;
+import com.example.logintestcase.utilities.MySharedPref;
 import com.example.logintestcase.viewmodels.LoginViewModel;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.text.TextUtils;
@@ -22,6 +27,8 @@ public class LoginActivity extends AppCompatActivity {
     EditText passwordEditText;
     Button loginButton;
     LoginViewModel mLoginViewModel;
+    private LiveData<LoginModel> mLoginModel;
+    private LiveData<String> mLoginError;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,15 +36,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         initViews();
-
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loginUser();
-            }
-        });
-
-        mLoginViewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
+        initViewModel();
+        initObservers();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
@@ -48,6 +48,37 @@ public class LoginActivity extends AppCompatActivity {
         emailEditText = findViewById(R.id.email_edit_text);
         passwordEditText = findViewById(R.id.password_edit_text);
         loginButton = findViewById(R.id.login_button);
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loginUser();
+            }
+        });
+    }
+
+    private void initViewModel(){
+        mLoginViewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
+        mLoginModel = mLoginViewModel.getLoginModel();
+        mLoginError = mLoginViewModel.getLoginError();
+    }
+
+    private void initObservers(){
+        mLoginModel.observe(this, new Observer<LoginModel>() {
+            @Override
+            public void onChanged(LoginModel loginModel) {
+                MySharedPref.setLoginModel(getApplicationContext(), loginModel);
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        mLoginError.observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                Toast.makeText(LoginActivity.this, s, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     void loginUser() {
