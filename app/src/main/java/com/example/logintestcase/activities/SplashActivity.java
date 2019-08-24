@@ -1,10 +1,12 @@
-package com.example.logintestcase;
+package com.example.logintestcase.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+
+import com.example.logintestcase.R;
 
 public class SplashActivity extends AppCompatActivity {
 

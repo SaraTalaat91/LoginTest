@@ -1,8 +1,9 @@
-package com.example.logintestcase;
+package com.example.logintestcase.activities;
 
 import android.os.Build;
 import android.os.Bundle;
 
+import com.example.logintestcase.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 

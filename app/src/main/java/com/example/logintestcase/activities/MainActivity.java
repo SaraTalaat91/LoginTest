@@ -1,8 +1,10 @@
-package com.example.logintestcase;
+package com.example.logintestcase.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.logintestcase.R;
 
 public class MainActivity extends AppCompatActivity {
 
