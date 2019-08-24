@@ -18,6 +18,7 @@ public class MySharedPref {
         Gson gson = new Gson();
         String loginModelJson = gson.toJson(loginModel);
         editor.putString(LOGIN_MODEL, loginModelJson);
+        editor.apply();
     }
 
     public static LoginModel getLoginModel(Context context) {
