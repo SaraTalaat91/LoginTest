@@ -2,6 +2,7 @@ package com.example.logintestcase.viewmodels;
 
 import android.util.Log;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -24,7 +25,6 @@ public class LoginViewModel extends ViewModel {
         mApiInterface = ApiClient.getClient().create(ApiInterface.class);
     }
 
-
     public void loginAccount(String email, String password) {
         RequestBody emailBody = RequestBody.create(MediaType.parse("text/plain"), email);
         RequestBody passwordBody = RequestBody.create(MediaType.parse("text/plain"), password);
@@ -32,17 +32,25 @@ public class LoginViewModel extends ViewModel {
         mApiInterface.login(emailBody, passwordBody).enqueue(new Callback<LoginModel>() {
             @Override
             public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
-                if(response.isSuccessful() && response.body() != null){
+                if (response.isSuccessful() && response.body() != null) {
                     mLoginModel.setValue(response.body());
-                    Log.d("LoginViewModel", "onResponse: "+ response.body().getMessage());
+                    Log.d("LoginViewModel", "onResponse: " + response.body().getMessage());
                 }
             }
 
             @Override
             public void onFailure(Call<LoginModel> call, Throwable t) {
                 mLoginError.setValue(t.getMessage());
-                Log.d("LoginViewModel", "onFailure: "+ t.getMessage());
+                Log.d("LoginViewModel", "onFailure: " + t.getMessage());
             }
         });
+    }
+
+    public LiveData<LoginModel> getLoginModel() {
+        return mLoginModel;
+    }
+
+    public LiveData<String> getLoginError() {
+        return mLoginError;
     }
 }
