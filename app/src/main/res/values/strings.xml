@@ -8,4 +8,6 @@
     <string name="no_account_text">Don\'t have an account?</string>
     <string name="forgot_password_text">Forgot Password?</string>
     <string name="empty_fields_toast">Please enter and password!</string>
+    <string name="incorrect_email_password_toast">Incorrect email or password!</string>
+    <string name="login_successful_toast">You logged in successfully!</string>
 </resources>

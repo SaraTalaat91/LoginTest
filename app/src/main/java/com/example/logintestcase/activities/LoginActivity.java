@@ -36,7 +36,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         checkLoginStatus();
-
         initViews();
         initViewModel();
         initObservers();
@@ -76,6 +75,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onChanged(LoginModel loginModel) {
                 MySharedPref.setLoginModel(getApplicationContext(), loginModel);
+                Toast.makeText(LoginActivity.this, R.string.login_successful_toast, Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
@@ -85,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
         mLoginError.observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                Toast.makeText(LoginActivity.this, s, Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, R.string.incorrect_email_password_toast, Toast.LENGTH_LONG).show();
             }
         });
     }
