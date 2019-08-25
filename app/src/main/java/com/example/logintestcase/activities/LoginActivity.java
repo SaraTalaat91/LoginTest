@@ -6,8 +6,10 @@ import android.os.Bundle;
 
 import com.example.logintestcase.R;
 import com.example.logintestcase.models.LoginModel;
+import com.example.logintestcase.utilities.Connectivity;
 import com.example.logintestcase.utilities.MySharedPref;
 import com.example.logintestcase.viewmodels.LoginViewModel;
+import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
@@ -109,7 +111,21 @@ public class LoginActivity extends AppCompatActivity {
     void loginUser() {
         String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
-        validateLogin(email, password);
+        if (Connectivity.isConnected(getApplicationContext())) {
+            validateLogin(email, password);
+        } else {
+            showNoConnectionSnack();
+        }
+    }
+
+    private void showNoConnectionSnack() {
+        final Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), getString(R.string.no_internet_connection_snack), Snackbar.LENGTH_LONG);
+        snackbar.setAction(R.string.dismiss_snack, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                snackbar.dismiss();
+            }
+        }).show();
     }
 
     private void validateLogin(String email, String password) {

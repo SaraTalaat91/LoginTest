@@ -12,4 +12,6 @@
     <string name="login_successful_toast">You logged in successfully!</string>
     <string name="welcome_text">Welcome to main screen!</string>
     <string name="logout_title">Logout</string>
+    <string name="no_internet_connection_snack">No internet connection</string>
+    <string name="dismiss_snack">Dismiss</string>
 </resources>
