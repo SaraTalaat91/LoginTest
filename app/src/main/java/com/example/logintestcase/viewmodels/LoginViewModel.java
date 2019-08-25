@@ -19,6 +19,7 @@ import retrofit2.Response;
 public class LoginViewModel extends ViewModel {
     private MutableLiveData<LoginModel> mLoginModel = new MutableLiveData<>();
     private MutableLiveData<String> mLoginError = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
     private ApiInterface mApiInterface;
 
     public LoginViewModel() {
@@ -26,6 +27,7 @@ public class LoginViewModel extends ViewModel {
     }
 
     public void loginAccount(String email, String password) {
+        isLoading.setValue(true);
         RequestBody emailBody = RequestBody.create(MediaType.parse("text/plain"), email);
         RequestBody passwordBody = RequestBody.create(MediaType.parse("text/plain"), password);
 
@@ -52,5 +54,13 @@ public class LoginViewModel extends ViewModel {
 
     public LiveData<String> getLoginError() {
         return mLoginError;
+    }
+
+    public LiveData<Boolean> getLoadingState(){
+        return isLoading;
+    }
+
+    public void finishedLoading(){
+        isLoading.setValue(false);
     }
 }

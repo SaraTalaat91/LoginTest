@@ -19,16 +19,20 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText emailEditText;
-    EditText passwordEditText;
-    Button loginButton;
-    LoginViewModel mLoginViewModel;
+    private EditText emailEditText;
+    private EditText passwordEditText;
+    private Button loginButton;
+    private ProgressBar progressBar;
+
+    private LoginViewModel mLoginViewModel;
     private LiveData<LoginModel> mLoginModel;
     private LiveData<String> mLoginError;
+    private LiveData<Boolean> mIsLoading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,16 +49,17 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void checkLoginStatus(){
-        if(MySharedPref.getLoginModel(getApplicationContext()) != null){
+    private void checkLoginStatus() {
+        if (MySharedPref.getLoginModel(getApplicationContext()) != null) {
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
             finish();
         }
     }
 
-    private void initViews(){
+    private void initViews() {
         emailEditText = findViewById(R.id.email_edit_text);
         passwordEditText = findViewById(R.id.password_edit_text);
+        progressBar = findViewById(R.id.progress_bar);
         loginButton = findViewById(R.id.login_button);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,16 +69,18 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void initViewModel(){
+    private void initViewModel() {
         mLoginViewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
         mLoginModel = mLoginViewModel.getLoginModel();
         mLoginError = mLoginViewModel.getLoginError();
+        mIsLoading = mLoginViewModel.getLoadingState();
     }
 
-    private void initObservers(){
+    private void initObservers() {
         mLoginModel.observe(this, new Observer<LoginModel>() {
             @Override
             public void onChanged(LoginModel loginModel) {
+                mLoginViewModel.finishedLoading();
                 MySharedPref.setLoginModel(getApplicationContext(), loginModel);
                 Toast.makeText(LoginActivity.this, R.string.login_successful_toast, Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -85,7 +92,16 @@ public class LoginActivity extends AppCompatActivity {
         mLoginError.observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
+                mLoginViewModel.finishedLoading();
                 Toast.makeText(LoginActivity.this, R.string.incorrect_email_password_toast, Toast.LENGTH_LONG).show();
+            }
+        });
+
+        mIsLoading.observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isLoading) {
+                if (isLoading) progressBar.setVisibility(View.VISIBLE);
+                else progressBar.setVisibility(View.GONE);
             }
         });
     }
