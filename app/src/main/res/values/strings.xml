@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Login Test Case</string>
+    <string name="app_name">Login Test</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="login_title">Login</string>
     <string name="password_hint">Password</string>
