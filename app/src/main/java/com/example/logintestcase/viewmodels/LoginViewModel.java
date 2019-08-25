@@ -36,14 +36,12 @@ public class LoginViewModel extends ViewModel {
             public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     mLoginModel.setValue(response.body());
-                    Log.d("LoginViewModel", "onResponse: " + response.body().getMessage());
                 }
             }
 
             @Override
             public void onFailure(Call<LoginModel> call, Throwable t) {
                 mLoginError.setValue(t.getMessage());
-                Log.d("LoginViewModel", "onFailure: " + t.getMessage());
             }
         });
     }
@@ -59,6 +57,8 @@ public class LoginViewModel extends ViewModel {
     public LiveData<Boolean> getLoadingState(){
         return isLoading;
     }
+
+    public void resetErrorMsg(){mLoginError.setValue("");}
 
     public void finishedLoading(){
         isLoading.setValue(false);

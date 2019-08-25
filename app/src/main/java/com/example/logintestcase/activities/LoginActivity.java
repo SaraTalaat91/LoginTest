@@ -95,7 +95,10 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onChanged(String s) {
                 mLoginViewModel.finishedLoading();
-                Toast.makeText(LoginActivity.this, R.string.incorrect_email_password_toast, Toast.LENGTH_LONG).show();
+                if (!TextUtils.isEmpty(s)) {
+                    Toast.makeText(LoginActivity.this, R.string.incorrect_email_password_toast, Toast.LENGTH_LONG).show();
+                    mLoginViewModel.resetErrorMsg();
+                }
             }
         });
 
